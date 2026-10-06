@@ -7,7 +7,7 @@ const INSTALL: Row[] = [
     id: "jest-install",
     title: "Install Jest for TypeScript",
     detail:
-      "From the Vite React-TS project root. These are devDependencies. typescript is already in the template. Do not install it again. @jest/globals is the Jest 30 type entry. Do not also install @types/jest. Do not install ts-node.",
+      "From the Vite React-TS project root. These are devDependencies. The React-TS template pins typescript at ~6.0.2. npm install typescript with no version is 7.0.2. ts-jest 29.4 then fails before any test, because TypeScript 7 does not expose the compiler API it needs. Do not install typescript again, and do not upgrade it on this page. @jest/globals is the Jest 30 type entry. Do not also install @types/jest. Do not install ts-node.",
     command: "npm install --save-dev jest ts-jest @jest/globals",
   },
 ];
@@ -128,8 +128,8 @@ export default function JestPage() {
           <li className="rounded-lg border border-border bg-surface px-4 py-4">
             <p className="font-mono text-sm text-muted line-through">npm run dev</p>
             <p className="mt-2 text-sm leading-relaxed text-fg">
-              The dev server does not run Jest. Saving <Code>src/sum.test.ts</Code> refreshes the app. It does not
-              print the test result.
+              The dev server does not run Jest. Vite reloads when a module the page already imports changes. Nothing
+              imports <Code>src/sum.test.ts</Code>, so saving it does not refresh the page and does not run the test.
             </p>
           </li>
           <li className="rounded-lg border border-border bg-surface px-4 py-4">

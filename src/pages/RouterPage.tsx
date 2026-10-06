@@ -39,7 +39,7 @@ const ROUTES: Row[] = [
     id: "rr-routes",
     title: "Routes, Route, and Link",
     detail:
-      'Paste this over App.tsx in that Vite app. This replaces the starter App.tsx. If that file already has routes, do not paste over it. Render <Hello />, <Greeting name="Ada" />, <Counter />, or <Names /> as the element of a route instead. Route takes element={<Home />}. component={Home} and <Switch> are not in the current API. <Link to="/about"> does not reload the page. <a href="/about"> does. There is no about.html. npm run dev and npm run preview are the Vite SPA server. They serve index.html for /about, then the router picks the element. A static host that 404s unknown paths will not. On Cloudflare Workers static assets, set assets.not_found_handling to "single-page-application", or a refresh of /about is a 404 instead of the About screen. This site does that, so a refresh of /router still opens this page. A fresh Vite template has no 404.html.',
+      'Paste this over the starter App.tsx. If App.tsx already renders Hello, Greeting, Counter, or Names, do not paste this over that file. Put that element on a Route instead. Route takes element={<Home />}. component={Home} and <Switch> are not in the current API. <Link to="/about"> does not reload the page. <a href="/about"> does. There is no about.html. npm run dev and npm run preview are the Vite SPA server. They serve index.html for /about, then the router picks the element. A static host that 404s unknown paths will not. On Cloudflare Workers static assets, set assets.not_found_handling to "single-page-application", or a refresh of /about is a 404 instead of the About screen. This site does that, so a refresh of /router still opens this page. A fresh Vite template has no 404.html.',
     command: `import { Link, Route, Routes } from "react-router";
 
 export default function App() {
@@ -104,9 +104,7 @@ export default function RouterPage() {
           React Router picks a component from the URL. The Vite dev server still transpiles on save. It still does
           not type-check. Commands and files below belong in the React-TS app, run from the project root after{" "}
           <Code>npm install</Code>. This page is one of those routes: <Link to="/" className="text-primary underline">the Vite sheet</Link>{" "}
-          stays at <Code>/</Code>. This replaces the starter <Code>App.tsx</Code>. If that file already has routes,
-          do not paste over it. Render <Code>{"<Hello />"}</Code>, <Code>{"<Greeting name=\"Ada\" />"}</Code>,{" "}
-          <Code>{"<Counter />"}</Code>, or <Code>{"<Names />"}</Code> as the element of a route instead.
+          stays at <Code>/</Code>.
         </p>
         <JumpNav jumps={JUMPS} />
       </header>
