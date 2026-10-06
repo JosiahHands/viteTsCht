@@ -76,6 +76,48 @@ const LINT: Row[] = [
   },
 ];
 
+const ROUTER: Row[] = [
+  {
+    id: "rr-install",
+    title: "Install React Router v6",
+    detail:
+      "From the Vite React-TS project root. The @6 pin stays on React Router 6. npm install react-router-dom with no version installs the latest major, which is a different API. Types ship inside the package. Do not install @types/react-router-dom. If npm run dev is already open, stop it and start it again so Vite loads the new dependency.",
+    command: "npm install --save react-router-dom@6",
+  },
+  {
+    id: "rr-main",
+    title: "One BrowserRouter, in src/main.tsx",
+    detail:
+      "Wrap App once, next to the existing createRoot call. Routes only work inside this router. Do not add a second BrowserRouter inside a page.",
+    command: `import { BrowserRouter } from "react-router-dom";
+
+<BrowserRouter>
+  <App />
+</BrowserRouter>`,
+  },
+  {
+    id: "rr-routes",
+    title: "Routes, Route, and Link",
+    detail:
+      "Put this in App.tsx. Route takes element={<Home />}. The v5 props component={Home} and the Switch component are not in v6. Link to=\"/about\" changes the URL without reloading. An a href=\"/about\" reloads the whole page. There is no about.html file. npm run dev and npm run preview already serve index.html for that path, then the router picks the element. A host that 404s unknown URLs will not: on Cloudflare Workers static assets, set not_found_handling to single-page-application, or a refresh of /about stays on 404.html.",
+    command: `import { Link, Route, Routes } from "react-router-dom";
+
+<Link to="/about">About</Link>
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/about" element={<About />} />
+</Routes>`,
+  },
+  {
+    id: "rr-nav",
+    title: "Move from code",
+    detail:
+      "useNavigate is a hook. Call it inside a component rendered under that BrowserRouter, not at the top of the file.",
+    command: `const navigate = useNavigate();
+navigate("/about");`,
+  },
+];
+
 const STEPS = [
   {
     n: "01",
@@ -100,6 +142,7 @@ const JUMPS = [
   { href: "#types", label: "Type-check" },
   { href: "#build", label: "Build and preview" },
   { href: "#lint", label: "Lint" },
+  { href: "#router", label: "React Router" },
   { href: "#dont", label: "Do not run" },
 ];
 
@@ -236,6 +279,25 @@ function Home() {
         .
       </p>
 
+      <CommandGroup
+        id="router"
+        title="React Router"
+        rows={ROUTER}
+        copied={copied}
+        copyErrorId={copyErrorId}
+        onCopy={copy}
+      />
+      <p className="mt-3 text-sm leading-relaxed text-muted">
+        Same v6 package, data-API style: <Code>createBrowserRouter</Code> plus <Code>RouterProvider</Code>. That is not a second install.{" "}
+        <a
+          href="https://reactrouter.com/6.30.6/routers/create-browser-router"
+          className="text-primary underline"
+        >
+          createBrowserRouter
+        </a>
+        .
+      </p>
+
       <section className="mt-12" aria-labelledby="dont">
         <SectionHeading id="dont">Do not run</SectionHeading>
         <ul className="mt-4 grid gap-3">
@@ -336,7 +398,13 @@ function CommandGroup({
               <h3 className="font-semibold text-fg">{row.title}</h3>
               <p className="mt-1 text-sm leading-relaxed text-muted">{row.detail}</p>
               <div className="mt-3 flex items-stretch gap-2">
-                <code className="flex min-h-11 min-w-0 flex-1 items-center overflow-x-auto rounded-lg border border-border bg-inset px-3 font-mono text-sm text-fg">
+                <code
+                  className={
+                    row.command.includes("\n")
+                      ? "block min-h-11 min-w-0 flex-1 overflow-x-auto whitespace-pre rounded-lg border border-border bg-inset px-3 py-3 font-mono text-sm leading-relaxed text-fg"
+                      : "flex min-h-11 min-w-0 flex-1 items-center overflow-x-auto rounded-lg border border-border bg-inset px-3 font-mono text-sm text-fg"
+                  }
+                >
                   {row.command}
                 </code>
                 <button
