@@ -7,7 +7,7 @@ const COMPONENT: Row[] = [
     id: "hello",
     title: "A component file",
     detail:
-      "Save this as src/Hello.tsx. A .tsx file is TypeScript that may contain JSX. The template sets jsx to react-jsx, so this file does not import React. export default is what App.tsx imports.",
+      "Save this as src/Hello.tsx. A .tsx file is TypeScript that may contain JSX. The react-jsx setting means you do not write import React from \"react\" just to use JSX. You still import hooks: import { useState } from \"react\". export default is what App.tsx imports.",
     command: `export default function Hello() {
   return <h1>Hello</h1>;
 }`,
@@ -16,7 +16,7 @@ const COMPONENT: Row[] = [
     id: "use-hello",
     title: "Render it from App.tsx",
     detail:
-      "Paste this over src/App.tsx in that Vite app. The import path includes .tsx because the template allows importing TypeScript extensions. Saving either file refreshes the dev server. That save does not type-check.",
+      "Paste this over src/App.tsx in that Vite app. This replaces the starter App.tsx. If that file already has routes, do not paste over it. Render <Hello />, <Greeting name=\"Ada\" />, <Counter />, or <Names /> as the element of a route instead. The import path includes .tsx because the template allows importing TypeScript extensions. Saving either file refreshes the dev server. That save does not type-check.",
     command: `import Hello from "./Hello.tsx";
 
 export default function App() {
@@ -30,13 +30,24 @@ const PROPS: Row[] = [
     id: "greeting",
     title: "Props are a type",
     detail:
-      "Save this as src/Greeting.tsx. name is required. Omit it at the call site and npx tsc -b reports the error. npm run dev still serves the page, because the dev server does not type-check.",
+      "Save this as src/Greeting.tsx. name is a required string prop.",
     command: `type GreetingProps = {
   name: string;
 };
 
 export default function Greeting({ name }: GreetingProps) {
   return <p>Hello, {name}</p>;
+}`,
+  },
+  {
+    id: "use-greeting",
+    title: "Render it from App.tsx",
+    detail:
+      "Drop name and npx tsc -b reports the missing prop. npm run dev still serves the page. This replaces the starter App.tsx. If that file already has routes, do not paste over it. Render <Hello />, <Greeting name=\"Ada\" />, <Counter />, or <Names /> as the element of a route instead.",
+    command: `import Greeting from "./Greeting.tsx";
+
+export default function App() {
+  return <Greeting name="Ada" />;
 }`,
   },
 ];
@@ -53,10 +64,21 @@ export default function Counter() {
   const [count, setCount] = useState(0);
 
   return (
-    <button type="button" onClick={() => setCount(count + 1)}>
+    <button type="button" onClick={() => setCount((count) => count + 1)}>
       {count}
     </button>
   );
+}`,
+  },
+  {
+    id: "use-counter",
+    title: "Render it from App.tsx",
+    detail:
+      "Counter takes no props. This replaces the starter App.tsx. If that file already has routes, do not paste over it. Render <Hello />, <Greeting name=\"Ada\" />, <Counter />, or <Names /> as the element of a route instead.",
+    command: `import Counter from "./Counter.tsx";
+
+export default function App() {
+  return <Counter />;
 }`,
   },
 ];
@@ -66,7 +88,7 @@ const LIST: Row[] = [
     id: "names",
     title: "A list needs a key",
     detail:
-      "Save this as src/Names.tsx. key goes on the element returned from map. It is not a prop Names reads. Use a stable value. The array index is a poor key when the list is reordered or filtered.",
+      "Save this as src/Names.tsx. key goes on the element you return from map. React does not pass it to li and it is not rendered. Use a stable value. The array index is a poor key when the list is reordered or filtered.",
     command: `const names = ["Ada", "Lin"];
 
 export default function Names() {
@@ -77,6 +99,17 @@ export default function Names() {
       ))}
     </ul>
   );
+}`,
+  },
+  {
+    id: "use-names",
+    title: "Render it from App.tsx",
+    detail:
+      "Names takes no props. This replaces the starter App.tsx. If that file already has routes, do not paste over it. Render <Hello />, <Greeting name=\"Ada\" />, <Counter />, or <Names /> as the element of a route instead.",
+    command: `import Names from "./Names.tsx";
+
+export default function App() {
+  return <Names />;
 }`,
   },
 ];
@@ -133,8 +166,8 @@ export default function ReactPage() {
           <li className="rounded-lg border border-border bg-surface px-4 py-4">
             <p className="font-mono text-sm text-muted line-through">class="card"</p>
             <p className="mt-2 text-sm leading-relaxed text-fg">
-              JSX uses <Code>className</Code>. <Code>class</Code> is not the DOM attribute name React accepts, and
-              the label on a form control is <Code>htmlFor</Code>, not <Code>for</Code>.
+              The HTML attribute is <Code>class</Code>. In JSX write <Code>className</Code>. React rejects{" "}
+              <Code>class</Code>. A label's HTML <Code>for</Code> is <Code>htmlFor</Code>.
             </p>
           </li>
           <li className="rounded-lg border border-border bg-surface px-4 py-4">
