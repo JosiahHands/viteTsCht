@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Check, Copy, Terminal } from "lucide-react";
+import { highlightTsx, type TokenKind } from "./highlight-tsx.ts";
 
 export default function App() {
   return <Home />;
@@ -429,11 +430,11 @@ function CommandGroup({
                 <code
                   className={
                     row.command.includes("\n")
-                      ? "block min-h-11 min-w-0 flex-1 overflow-x-auto whitespace-pre rounded-lg border border-border bg-inset px-3 py-3 font-mono text-sm leading-relaxed text-fg"
+                      ? "vs-editor block min-h-11 min-w-0 flex-1 overflow-x-auto whitespace-pre rounded-lg border border-border px-3 py-3 font-mono text-sm leading-6"
                       : "flex min-h-11 min-w-0 flex-1 items-center overflow-x-auto rounded-lg border border-border bg-inset px-3 font-mono text-sm text-fg"
                   }
                 >
-                  {row.command}
+                  {row.command.includes("\n") ? <Highlighted source={row.command} /> : row.command}
                 </code>
                 <button
                   type="button"
@@ -463,6 +464,29 @@ function CommandGroup({
     </section>
   );
 }
+
+function Highlighted({ source }: { source: string }) {
+  return highlightTsx(source).map((token, index) => (
+    <span key={index} className={VS_CLASS[token.kind]}>
+      {token.text}
+    </span>
+  ));
+}
+
+const VS_CLASS: Record<TokenKind, string> = {
+  comment: "vs-comment",
+  string: "vs-string",
+  keyword: "vs-keyword",
+  storage: "vs-storage",
+  func: "vs-func",
+  var: "vs-var",
+  tag: "vs-tag",
+  html: "vs-html",
+  attr: "vs-attr",
+  num: "vs-num",
+  tagpunct: "vs-tagpunct",
+  punct: "vs-punct",
+};
 
 function SectionHeading({ id, children }: { id: string; children: string }) {
   return (

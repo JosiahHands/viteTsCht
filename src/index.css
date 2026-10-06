@@ -43,6 +43,60 @@
   }
 }
 
+/* VS Code Dark Modern editor text. Shell commands do not use these. */
+.vs-editor {
+  background: #1f1f1f;
+  color: #cccccc;
+}
+
+.vs-comment {
+  color: #6a9955;
+}
+
+.vs-string {
+  color: #ce9178;
+}
+
+.vs-keyword {
+  color: #c586c0;
+}
+
+.vs-storage {
+  color: #569cd6;
+}
+
+.vs-func {
+  color: #dcdcaa;
+}
+
+.vs-var {
+  color: #9cdcfe;
+}
+
+.vs-tag {
+  color: #4ec9b0;
+}
+
+.vs-html {
+  color: #569cd6;
+}
+
+.vs-attr {
+  color: #9cdcfe;
+}
+
+.vs-num {
+  color: #b5cea8;
+}
+
+.vs-tagpunct {
+  color: #808080;
+}
+
+.vs-punct {
+  color: #cccccc;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
