@@ -79,42 +79,72 @@ const LINT: Row[] = [
 const ROUTER: Row[] = [
   {
     id: "rr-install",
-    title: "Install React Router v6",
+    title: "Install React Router",
     detail:
-      "From the Vite React-TS project root. The @6 pin stays on React Router 6. npm install react-router-dom with no version installs the latest major, which is a different API. Types ship inside the package. Do not install @types/react-router-dom. If npm run dev is already open, stop it and start it again so Vite loads the new dependency.",
-    command: "npm install --save react-router-dom@6",
+      "From the Vite React-TS project root. Declarative mode is BrowserRouter, Routes, Route, Link, and useNavigate. Types ship in react-router. Do not install @types/react-router-dom. If npm run dev is already open, stop it and start it again so Vite loads the new dependency.",
+    command: "npm install react-router",
   },
   {
     id: "rr-main",
     title: "One BrowserRouter, in src/main.tsx",
     detail:
-      "Wrap App once, next to the existing createRoot call. Routes only work inside this router. Do not add a second BrowserRouter inside a page.",
-    command: `import { BrowserRouter } from "react-router-dom";
+      "Paste this over src/main.tsx in that Vite app. One router, in this file, around App. Do not add a second BrowserRouter in a page.",
+    command: `import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router";
+import "./index.css";
+import App from "./App.tsx";
 
-<BrowserRouter>
-  <App />
-</BrowserRouter>`,
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+);`,
   },
   {
     id: "rr-routes",
     title: "Routes, Route, and Link",
     detail:
-      "Put this in App.tsx. Route takes element={<Home />}. The v5 props component={Home} and the Switch component are not in v6. Link to=\"/about\" changes the URL without reloading. An a href=\"/about\" reloads the whole page. There is no about.html file. npm run dev and npm run preview already serve index.html for that path, then the router picks the element. A host that 404s unknown URLs will not: on Cloudflare Workers static assets, set not_found_handling to single-page-application, or a refresh of /about stays on 404.html.",
-    command: `import { Link, Route, Routes } from "react-router-dom";
+      'Paste this over App.tsx in that Vite app. Route takes element={<Home />}. component={Home} and <Switch> are not in the current API. <Link to="/about"> does not reload the page. <a href="/about"> does. There is no about.html. npm run dev and npm run preview are Vite’s SPA server. They serve index.html for /about, then the router picks the element. A static host that 404s unknown paths will not. On Cloudflare Workers static assets, set assets.not_found_handling to "single-page-application", or a refresh of /about is a 404 instead of the About screen. A fresh Vite template has no 404.html. This cheat sheet repo does, and its Wrangler config stays "404-page" on purpose. Do not change this repo.',
+    command: `import { Link, Route, Routes } from "react-router";
 
-<Link to="/about">About</Link>
-<Routes>
-  <Route path="/" element={<Home />} />
-  <Route path="/about" element={<About />} />
-</Routes>`,
+export default function App() {
+  return (
+    <>
+      <Link to="/about">About</Link>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </>
+  );
+}
+
+function Home() {
+  return <h1>Home</h1>;
+}
+
+function About() {
+  return <h1>About</h1>;
+}`,
   },
   {
     id: "rr-nav",
-    title: "Move from code",
+    title: "Move from a click",
     detail:
-      "useNavigate is a hook. Call it inside a component rendered under that BrowserRouter, not at the top of the file.",
-    command: `const navigate = useNavigate();
-navigate("/about");`,
+      "useNavigate is a hook. Call it in a component rendered under that BrowserRouter. Call navigate from the click handler, not while the component is rendering.",
+    command: `import { useNavigate } from "react-router";
+
+function Go() {
+  const navigate = useNavigate();
+  return (
+    <button type="button" onClick={() => navigate("/about")}>
+      About
+    </button>
+  );
+}`,
   },
 ];
 
@@ -138,6 +168,7 @@ const STEPS = [
 
 const JUMPS = [
   { href: "#loop", label: "Daily loop" },
+  { href: "#create", label: "Create that project" },
   { href: "#dev", label: "Dev server" },
   { href: "#types", label: "Type-check" },
   { href: "#build", label: "Build and preview" },
@@ -288,12 +319,9 @@ function Home() {
         onCopy={copy}
       />
       <p className="mt-3 text-sm leading-relaxed text-muted">
-        Same v6 package, data-API style: <Code>createBrowserRouter</Code> plus <Code>RouterProvider</Code>. That is not a second install.{" "}
-        <a
-          href="https://reactrouter.com/6.30.6/routers/create-browser-router"
-          className="text-primary underline"
-        >
-          createBrowserRouter
+        Data mode is the same react-router install, not a second package. <Code>createBrowserRouter</Code> is imported from <Code>react-router</Code>. <Code>RouterProvider</Code> is imported from <Code>react-router/dom</Code>.{" "}
+        <a href="https://reactrouter.com/start/data/installation" className="text-primary underline">
+          Data mode installation
         </a>
         .
       </p>
@@ -410,7 +438,7 @@ function CommandGroup({
                 <button
                   type="button"
                   onClick={() => onCopy(row.id, row.command)}
-                  aria-label={didCopy ? `Copied ${row.command}` : `Copy ${row.command}`}
+                  aria-label={didCopy ? `Copied ${row.title}` : `Copy ${row.title}`}
                   className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg bg-primary px-3 text-sm font-semibold text-primary-fg transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >
                   {didCopy ? (
