@@ -18,4 +18,4 @@ npx wrangler login
 npm run deploy
 ```
 
-`npm run deploy` builds `dist/` and publishes it with Wrangler. Unknown paths return `public/404.html` with HTTP 404. There is no Worker script.
+`npm run deploy` builds `dist/` and publishes it with Wrangler. This is a SPA, so a refresh of `/router` still loads `index.html`. Unknown paths render the in-app not-found page. There is no Worker script.
