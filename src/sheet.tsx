@@ -12,6 +12,7 @@ export type Row = {
 
 const PAGES = [
   { to: "/", label: "Vite", end: true },
+  { to: "/react", label: "React", end: false },
   { to: "/router", label: "React Router", end: false },
 ];
 
