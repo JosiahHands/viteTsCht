@@ -65,13 +65,13 @@ const FILTER: Row[] = [
     id: "jest-filter",
     title: "src/filterByTerm.ts",
     detail:
-      "Save this as src/filterByTerm.ts. Another TypeScript module. Link is the element type. An empty searchTerm throws. The function returns the matches. A JavaScript original of this example used module.exports and did not return the filtered array. This file returns Link[].",
-    command: `export type Link = {
+      "Save this as src/filterByTerm.ts. Another TypeScript module. Entry is the element type. An empty searchTerm throws. The function returns the matches. A JavaScript original of this example used module.exports. This file uses export.",
+    command: `export type Entry = {
   id: number;
   url: string;
 };
 
-export function filterByTerm(input: Link[], searchTerm: string): Link[] {
+export function filterByTerm(input: Entry[], searchTerm: string): Entry[] {
   if (!searchTerm) {
     throw new Error("searchTerm cannot be empty");
   }
@@ -83,11 +83,11 @@ export function filterByTerm(input: Link[], searchTerm: string): Link[] {
     id: "jest-filter-test",
     title: "src/filterByTerm.test.ts",
     detail:
-      "Save this as src/filterByTerm.test.ts. toEqual compares the array. toThrow checks the empty-term error. import type { Link } is required: verbatimModuleSyntax is on, so a type-only name cannot use a value import.",
+      "Save this as src/filterByTerm.test.ts. toEqual compares the array. toThrow checks the empty-term error. import type { Entry } is required: verbatimModuleSyntax is on, so a type-only name cannot use a value import.",
     command: `import { describe, expect, test } from "@jest/globals";
-import { filterByTerm, type Link } from "./filterByTerm.ts";
+import { filterByTerm, type Entry } from "./filterByTerm.ts";
 
-const input: Link[] = [
+const input: Entry[] = [
   { id: 1, url: "https://www.url1.dev" },
   { id: 2, url: "https://www.url2.dev" },
   { id: 3, url: "https://www.link3.dev" },
@@ -155,13 +155,45 @@ describe("fetchData", () => {
   },
 ];
 
+const HELLO: Row[] = [
+  {
+    id: "jest-hello",
+    title: "src/Hello.tsx",
+    detail:
+      "Save this as src/Hello.tsx only when that file is not already in the project. The React page uses this same component. If it is already there, do not paste over it. Add the test only.",
+    command: `export default function Hello() {
+  return <h1>Hello</h1>;
+}`,
+  },
+  {
+    id: "jest-hello-test",
+    title: "src/Hello.test.tsx",
+    detail:
+      "Save this as src/Hello.test.tsx. react-dom is already a dependency. renderToStaticMarkup checks the markup string. It does not open a browser. Do not install @testing-library/react or jest-environment-jsdom. testEnvironment stays node.",
+    command: `import { expect, test } from "@jest/globals";
+import { renderToStaticMarkup } from "react-dom/server";
+import Hello from "./Hello.tsx";
+
+test("renders a heading", () => {
+  expect(renderToStaticMarkup(<Hello />)).toBe("<h1>Hello</h1>");
+});`,
+  },
+];
+
 const RUN: Row[] = [
+  {
+    id: "jest-script",
+    title: "One line inside scripts",
+    detail:
+      "Put this one line inside the scripts object in that project's package.json. Do not replace the whole file. The value is the command that already works. Do not set the script to jest. Bare \"test\": \"jest\" and npx jest do not turn on Node's ESM loader.",
+    command: `"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"`,
+  },
   {
     id: "jest-run",
     title: "Run the tests",
     detail:
-      "From the project root, after the install. This is not npm run dev and not npx tsc -b. Those other guides run npx jest or npm test. This template has no test script, and npx jest alone does not turn on Node's ESM loader. Node still prints ExperimentalWarning. That warning is not a failed test. ts-jest may also print TS151001, asking for esModuleInterop. The tests can still pass. Do not add esModuleInterop to tsconfig.app.json for that warning.",
-    command: "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+      "From the project root, after the install and the script line. This is not npm run dev and not npx tsc -b. Node still prints ExperimentalWarning. That warning is not a failed test. ts-jest may also print TS151001, asking for esModuleInterop. The tests can still pass. Do not add esModuleInterop to tsconfig.app.json for that warning.",
+    command: "npm test",
   },
 ];
 
@@ -171,6 +203,7 @@ const JUMPS = [
   { href: "#sum", label: "Sum" },
   { href: "#filter", label: "Filter" },
   { href: "#async", label: "Mock and async" },
+  { href: "#hello", label: "React" },
   { href: "#run", label: "Run" },
   { href: "#dont", label: "Do not" },
 ];
@@ -183,13 +216,15 @@ export default function JestPage() {
       <header className="border-b border-border pb-8">
         <Kicker>React · Vite · TypeScript</Kicker>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-fg sm:text-5xl">
-          Jest for TypeScript modules
+          Jest for TypeScript and React
         </h1>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
-          These are <Code>.ts</Code> modules in the React-TS app, not <Code>.tsx</Code> components. The cases match a
-          plain TypeScript Jest walkthrough (a typed <Code>sum</Code>, a mock, a resolved Promise, a rejected Promise)
-          and a filter module checked with <Code>toEqual</Code>. Jest does not run through Vite.{" "}
-          <Code>vite-jest</Code> does not work on Vite after 2.4.2.{" "}
+          These files are TypeScript in the React-TS app: <Code>.ts</Code> modules and a <Code>.tsx</Code> component.
+          The cases match a plain TypeScript Jest walkthrough (a typed <Code>sum</Code>, a mock, a resolved Promise, a
+          rejected Promise) and a filter module checked with <Code>toEqual</Code>. JSX compiles because{" "}
+          <Code>tsconfig.app.json</Code> sets <Code>jsx</Code> to <Code>react-jsx</Code>, and this Jest config points
+          ts-jest at that file. Jest does not run through Vite. <Code>vite-jest</Code> does not work on Vite after
+          2.4.2.{" "}
           <Link to="/" className="text-primary underline">
             The Vite sheet
           </Link>{" "}
@@ -206,6 +241,14 @@ export default function JestPage() {
         id="async"
         title="Mock and async"
         rows={ASYNC}
+        copied={copied}
+        copyErrorId={copyErrorId}
+        onCopy={copy}
+      />
+      <CommandGroup
+        id="hello"
+        title="React"
+        rows={HELLO}
         copied={copied}
         copyErrorId={copyErrorId}
         onCopy={copy}
@@ -242,10 +285,11 @@ export default function JestPage() {
             </p>
           </li>
           <li className="rounded-lg border border-border bg-surface px-4 py-4">
-            <p className="font-mono text-sm text-muted line-through">a .tsx test</p>
+            <p className="font-mono text-sm text-muted line-through">a .css import</p>
             <p className="mt-2 text-sm leading-relaxed text-fg">
-              JSX, CSS, and <Code>import.meta</Code> go through Vite. This Jest config does not load Vite plugins.
-              Keep these tests on the <Code>.ts</Code> modules above.
+              CSS and <Code>import.meta</Code> go through Vite. This config does not load Vite plugins, so a test that
+              imports a <Code>.css</Code> file or reads <Code>import.meta</Code> is still out. A <Code>.tsx</Code>{" "}
+              component with no CSS is in scope. <Code>renderToStaticMarkup</Code> only checks the markup string.
             </p>
           </li>
           <li className="rounded-lg border border-border bg-surface px-4 py-4">
