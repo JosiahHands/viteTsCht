@@ -15,6 +15,7 @@ const PAGES = [
   { to: "/react", label: "React", end: false },
   { to: "/router", label: "React Router", end: false },
   { to: "/jest", label: "Jest", end: false },
+  { to: "/redux", label: "Redux", end: false },
 ];
 
 export function Frame({ title, children }: { title: string; children: ReactNode }) {
